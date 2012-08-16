@@ -7,7 +7,7 @@ Feeder is a Fuel package that generates RSS feeds.
 Simply add `feeder` to your config.php `always_loaded.packages` config option.
 
 ## Usage
-**Notice:** This is the planned usage and was written before any development, so it will probably (most likely) change. I would probably need to stupify it but make it stricter. Feel free to send me feedback!
+**Notice:** This is the planned usage and was written before any development, so it will probably (most likely) change. I'd like to stupify it (easier to work with) but make it stricter (only one way to do each task). Feel free to send me feedback!
 
 Initialize a new feed object:
 
