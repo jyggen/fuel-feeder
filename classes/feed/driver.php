@@ -28,15 +28,23 @@ abstract class Feed_Driver
 
 	}
 
-	/**
-	 * Add the specified tag to the XML.
-	 *
-	 * @param	string	$tag
-	 * @param	string	$value
-	 * @param	string	$namespace
-	 * @return	void
-	 */
+	abstract public function addItem();
 	abstract public function addTag($tag, $value, $namespace);
+
+	/**
+	 * Get the name of the current driver.
+	 *
+	 * @return	string
+	 */
+	protected function getDriver()
+	{
+
+		$driver = explode('_', get_class($this));
+		$driver = strtolower($driver[count($driver)-1]);
+
+		return $driver;
+
+	}
 
 	/**
 	 * Returns the feed as XML in a Response object with correct Content-Type.
