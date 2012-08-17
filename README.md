@@ -41,13 +41,11 @@ Feeder will automatically generate the following tags for you:
 
 You can override these with `Feed::addTag()` or their own method (see documentation, e.g. `Feed::generator()`, `Feed::lastBuildDate()`). All generated tags are based upon your configuration and current request information (`atom:link` is `Uri::current()`, `link` is `Uri::base()` etc.).
 
-Next up, you'd want to populate your feed with some items. Let's create one for RSS 2.0:
+Next up, you'd want to populate your feed with some items. The Item object works the same way as the Feed object. Let's create one:
 
-	$item = Feeder\Item::forge('rss2');
-
-The Item object works the same way as the Feed object. To add this item to the feed you do this:
-
-	$feed->addItem($item);
+	$item = $feed->addItem();
+	$item->title('My Post');
+	$item->description('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 
 Finally, let's return the feed as the response from the controller. This will automatically convert your feed into an XML and return it as an `Response` with proper HTTP headers (basically what `Controller_Rest::response()` does but simplified).
 
