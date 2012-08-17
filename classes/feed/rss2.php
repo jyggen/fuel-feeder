@@ -41,10 +41,119 @@ class Feed_Rss2 extends Feed_Driver
 		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/syndication/', 'sy:attr');
 		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/slash/', 'slash:attr');
 
-		// Create channel element and append it to root.
+		// Create channel and items elements.
 		$channel = $this->feed->createElement('channel');
+		$items   = $this->feed->createElement('items');
 
+		$channel->appendChild($items);
 		$rss->appendChild($channel);
+
+	}
+
+	/**
+	 * Create <description> in <channel>. Should be a description of what you're "feeding".
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function description($value)
+	{
+
+		$this->addTag('description', $value);
+
+	}
+
+	/**
+	 * Create <generator> in <channel>. Program used to generate the channel.
+	 * This tag will be automatically created by Feeder to give itself some credit.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function generator($value)
+	{
+
+		$this->addTag('generator', $value);
+
+	}
+
+	/**
+	 * Create <language> in <channel>. Should be the language of the feed.
+	 * This tag will be automatically created by Feeder with the value of config.language if missing.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function language($value)
+	{
+
+		$this->addTag('language', $value);
+
+	}
+
+	/**
+	 * Create <lastBuildDate> in <channel>. Should be when this feed was last updated.
+	 * This tag will be automatically created by Feeder with the current timestamp if missing.
+	 *
+	 * @param	\Date	$value
+	 * @return	void
+	 */
+	public function lastBuildDate(\Date $value)
+	{
+
+		/**
+		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
+		 * Also, the DATE_RSS constant is pretty nice :)
+		 */
+		$this->addTag('lastBuildDate', date(DATE_RSS, $value->get_timestamp()));
+
+	}
+
+	/**
+	 * Create <title> in <channel>. Should be the title of your feed.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function title($value)
+	{
+
+		$this->addTag('title', $value);
+
+	}
+
+	/**
+	 * Add the specified tag in <channel>.
+	 *
+	 * @param	string	$tag
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function AddTag($tag, $value)
+	{
+
+		$channel = $this->getChannel();
+		$element = $this->feed->createElement($tag, $value);
+
+		$channel->appendChild($element);
+
+	}
+
+	/**
+	 * Get the tag <channel> from the feed.
+	 *
+	 * @return	\DOMElement
+	 */
+	protected function getChannel()
+	{
+
+		$channel = $this->feed->getElementsByTagName('channel')->item(0);
+
+		if(is_null($channel)) {
+
+			throw new MissingTagException(htmlentities('Missing tag <channel> in feed.'));
+
+		} else return $channel;
 
 	}
 
