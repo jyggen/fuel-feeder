@@ -41,11 +41,9 @@ class Feed_Rss2 extends Feed_Driver
 		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/syndication/', 'sy:attr');
 		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/slash/', 'slash:attr');
 
-		// Create channel and items elements.
+		// Create channel element.
 		$channel = $this->feed->createElement('channel');
-		$items   = $this->feed->createElement('items');
 
-		$channel->appendChild($items);
 		$rss->appendChild($channel);
 
 	}
@@ -175,6 +173,23 @@ class Feed_Rss2 extends Feed_Driver
 	{
 
 		$this->addTag('title', $value);
+
+	}
+
+	/**
+	 * Add the item object to the feed.
+	 *
+	 * @return	object	Item_Rss2
+	 */
+	public function addItem() {
+
+		$item    = Item::forge($this->getDriver(), $this->feed);
+		$element = $item->getElement();
+		$channel = $this->getChannel();
+
+		$channel->appendChild($element);
+
+		return $item;
 
 	}
 
