@@ -1,6 +1,6 @@
 # Feeder
 
-Feeder is a Fuel package that generates RSS feeds. It's still under development but you can already generate valid RSS with it!
+Feeder is a Fuel package that generates RSS feeds.
 
 ## Installing
 
@@ -8,47 +8,39 @@ Simply add `feeder` to your config.php `always_loaded.packages` config option.
 
 ## Usage
 
-Initialize a new feed object:
+Forge a new feed object using the RSS 2.0 driver (which is the default):
 
-	$feed = new Feeder\Feed;
+	$feed = Feeder\Feed::forge('rss2');
 
-Next step is to set a few attributes. There's two required attributes: `title` and `description`.
+Next step is to add a few tags. There's three required tags in RSS 2.0: `title`, `description` and `link`.
 
 	$feed->title('Latest Posts');
 	$feed->description('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 
-You could also set the attributes with `Feed::setAttr()`. This is also the way to go if you want to define your own attributes.
+You could also set the tags with `Feed::addTag()`. This is also the way to go if you want to define your own tags.
 
-	$feed->setAttr('title', 'Latest Posts');
-	$feed->setAttr('link', 'http://www.example.com/');
+	$feed->addTag('title', 'Latest Posts');
+	$feed->addTag('myAwesomeTag', 'http://www.example.com/');
 
-Feeder will automatically generate the following attributes for you:
+Feeder will automatically generate the following tags for you:
 
 * atom:link
 * generator
 * lastBuildDate
 * language
+* link
 * sy:updateFrequency
 * sy:updatePeriod
 
-You can override these with `Feed::setAttr()` or their own method (see documentation, e.g. `Feed::generator()`, `Feed::builDate()`). These attributes are based upon your Feeder config and current request information (`atom:link` is `Uri::current()` etc.).
+You can override these with `Feed::addTag()` or their own method (see documentation, e.g. `Feed::generator()`, `Feed::lastBuildDate()`). All generated tags are based upon your configuration and current request information (`atom:link` is `Uri::current()`, `link` is `Uri::base()` etc.).
 
-Next up, you'd want to populate your feed with some items. Let's create one:
+Next up, you'd want to populate your feed with some items. Let's create one for RSS 2.0:
 
-	$item = new Feeder\Item;
+	$item = Feeder\Item::forge('rss2');
 
-The Item object works the same way as the Feed object, so you use the same method to append data.
-
-	$item       = new Feeder\Item('Awesome Post'); // Title as an argument, remember?
-	$item->link = 'http://www.example.com/awesome-post.html';
-
-	$item->setAttr('description', 'Duis auctor scelerisque purus, eu pretium lectus sagittis vitae.');
-	$item->setAttr('dc:creator', 'John Doe');
-
-To add this item to the feed you can do any of these two:
+The Item object works the same way as the Feed object. To add this item to the feed you do this:
 
 	$feed->addItem($item);
-	$feed->items[] = $item;
 
 Finally, let's return the feed as the response from the controller. This will automatically convert your feed into an XML and return it as an `Response` with proper HTTP headers (basically what `Controller_Rest::response()` does but simplified).
 
