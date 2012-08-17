@@ -11,8 +11,10 @@
  */
 
 Autoloader::add_classes(array(
-	'Feeder\\Feed' => __DIR__.'/classes/feed.php',
-
+	'Feeder\\Feed'        => __DIR__.'/classes/feed.php',
 	'Feeder\\Feed_Driver' => __DIR__.'/classes/feed/driver.php',
 	'Feeder\\Feed_Rss2'   => __DIR__.'/classes/feed/rss2.php',
+	'Feeder\\Item'        => __DIR__.'/classes/item.php',
+	'Feeder\\Item_Driver' => __DIR__.'/classes/item/driver.php',
+	'Feeder\\Item_Rss2'   => __DIR__.'/classes/item/rss2.php',
 ));
