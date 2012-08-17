@@ -12,7 +12,7 @@
 
 namespace Feeder;
 
-class Feed_Driver
+abstract class Feed_Driver
 {
 
 	protected $contentType;
@@ -23,18 +23,19 @@ class Feed_Driver
 	public function __construct()
 	{
 
-		$this->feed = new \DOMDocument('1.0', 'utf-8');
+		$this->feed               = new \DOMDocument('1.0', 'utf-8');
+		$this->feed->formatOutput = true;
 
 	}
 
 	/**
-	 * Set a value for the specified attribute.
+	 * Add the specified tag to the XML.
 	 *
-	 * @param	string	$attr
+	 * @param	string	$tag
 	 * @param	string	$value
 	 * @return	void
 	 */
-	#3abstract public function setAttr($attr, $value);
+	abstract public function addTag($tag, $value);
 
 	/**
 	 * Returns the feed as XML in a Response object with correct Content-Type.
