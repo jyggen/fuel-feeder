@@ -15,11 +15,11 @@ namespace Feeder;
 class Item
 {
 
-	public static function forge($driver='rss2')
+	public static function forge($driver='rss2', $document)
 	{
 
 		$class  = 'Feeder\\Item_'.ucfirst($driver);
-		$driver = new $class();
+		$driver = new $class($document);
 
 		return $driver;
 
