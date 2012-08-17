@@ -15,7 +15,8 @@ namespace Feeder;
 class Feed
 {
 
-	protected $attributes = array();
+	protected $feed     = array();
+	protected $required = array('description', 'title');
 
 	public function __construct()
 	{
@@ -23,20 +24,24 @@ class Feed
 	}
 
 	/**
-	 * Set a value for the attribute "lastBuildDate". This attribute is automatically generated if missing.
+	 * Helper to set a value for the attribute "lastBuildDate". Automatically generated if missing.
 	 *
-	 * @param	\Fuel\Core\Date	$value
+	 * @param	\Date	$value
 	 * @return	void
 	 */
-	public function buildDate(\Fuel\Core\Date $value)
+	public function buildDate(\Date $value)
 	{
 
-		$this->setAttr('lastBuildDate', $value);
+		/**
+		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
+		 * Also, the DATE_RSS constant is pretty nice :)
+		 */
+		$this->setAttr('lastBuildDate', date(DATE_RSS, $value->get_timestamp()));
 
 	}
 
 	/**
-	 * Set a value for the attribute "description".
+	 * Helper to set a value for the attribute "description".
 	 *
 	 * @param	string	$value
 	 * @return	void
@@ -49,7 +54,7 @@ class Feed
 	}
 
 	/**
-	 * Set a value for the attribute "title".
+	 * Helper to set a value for the attribute "title".
 	 *
 	 * @param	string	$value
 	 * @return	void
@@ -58,6 +63,24 @@ class Feed
 	{
 
 		$this->setAttr('title', $value);
+
+	}
+
+	/**
+	 * Returns the feed as XML in a Response object with correct Content-Type.
+	 *
+	 * @return	object	\Response
+	 */
+	public function response()
+	{
+
+		$response         = \Response::forge();
+		$response->status = 200;
+
+		$response->set_header('Content-Type', 'application/xml');
+		$response->body($this);
+
+		return $response;
 
 	}
 
@@ -71,7 +94,19 @@ class Feed
 	public function setAttr($attr, $value)
 	{
 
+		$this->feed[$attr] = $value;
 
+	}
+
+	/**
+	 * Return as XML when the object is converted to string.
+	 *
+	 * @return	string
+	 */
+	public function __toString()
+	{
+
+		return \Fuel\Core\Format::forge($this->feed)->to_xml();
 
 	}
 
