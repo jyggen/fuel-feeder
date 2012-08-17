@@ -13,28 +13,26 @@ Initialize a new feed object:
 
 	$feed = new Feeder\Feed;
 
-You could also supply an argument which will be used as the feed title:
-
-	$feed = new Feeder\Feed('Latest Posts');
-
 Next step is to set a few attributes. There's two required attributes: `title` and `description`.
 
-	$feed->setAttr('description', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-	$feed->setAttr('title', 'Latest Posts');           // This would override the one set during init.
-	$feed->setAttr('link', 'http://www.example.com/'); // We could also define our own attributes.
+	$feed->title('Latest Posts');
+	$feed->description('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 
-You could also set the attributes directly. However, this will only work with required/generated attributes.
+You could also set the attributes with `Feed::setAttr()`. This is also the way to go if you want to define your own attributes.
 
-	$feed->title       = 'Latest Posts';
-	$feed->description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+	$feed->setAttr('title', 'Latest Posts');
+	$feed->setAttr('link', 'http://www.example.com/');
 
-Feeder will automatically generate a few attributes based on your config and the current request. You can override these with `setAttr()` or the above method.
+Feeder will automatically generate the following attributes for you:
 
 * atom:link
 * generator
 * lastBuildDate
 * language
+* sy:updateFrequency
 * sy:updatePeriod
+
+You can override these with `Feed::setAttr()` or their own method (see documentation, e.g. `Feed::generator()`, `Feed::builDate()`). These attributes are based upon your Feeder config and current request information (`atom:link` is `Uri::current()` etc.).
 
 Next up, you'd want to populate your feed with some items. Let's create one:
 
@@ -53,6 +51,4 @@ To add this item to the feed you can do any of these two:
 	$feed->addItem($item);
 	$feed->items[] = $item;
 
-All items added? Let's send it to the browser through a Response object and FuelPHP will take care of the rest.
-
-	return new Response($feed);
+Finally, let's return the feed as the response from the controller with `Feed:response()`! This method will automatically convert your feed into an XML and return ito as an `Response` object with proper HTTP headers (basically what `Controller_Rest::response()` does but simplified).
