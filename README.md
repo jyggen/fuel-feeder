@@ -51,4 +51,6 @@ To add this item to the feed you can do any of these two:
 	$feed->addItem($item);
 	$feed->items[] = $item;
 
-Finally, let's return the feed as the response from the controller with `Feed:response()`! This method will automatically convert your feed into an XML and return ito as an `Response` object with proper HTTP headers (basically what `Controller_Rest::response()` does but simplified).
+Finally, let's return the feed as the response from the controller. This will automatically convert your feed into an XML and return ito as an `Response` object with proper HTTP headers (basically what `Controller_Rest::response()` does but simplified).
+
+	return $feed->response();
