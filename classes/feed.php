@@ -12,6 +12,10 @@
 
 namespace Feeder;
 
+
+class MissingTagException extends \FuelException {}
+
+
 class Feed
 {
 
