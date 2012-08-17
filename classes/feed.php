@@ -15,13 +15,28 @@ namespace Feeder;
 class Feed
 {
 
-	protected $feed     = array();
+	/**
+	 * @var	array	contains the feed
+	 */
+	protected $feed = array('channel' => '');
+
+	/**
+	 * @var	string	basic feed structure
+	 */
+	protected $format = '<?xml version="1.0" encoding="utf-8"?><rss
+							version="2.0"
+							xmlns:content="http://purl.org/rss/1.0/modules/content/"
+							xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+							xmlns:dc="http://purl.org/dc/elements/1.1/"
+							xmlns:atom="http://www.w3.org/2005/Atom"
+							xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+							xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+						 />';
+
+	/**
+	 * @var	array	required attributes
+	 */
 	protected $required = array('description', 'title');
-
-	public function __construct()
-	{
-
-	}
 
 	/**
 	 * Helper to set a value for the attribute "lastBuildDate". Automatically generated if missing.
@@ -94,7 +109,7 @@ class Feed
 	public function setAttr($attr, $value)
 	{
 
-		$this->feed[$attr] = $value;
+		$this->feed['channel'][$attr] = $value;
 
 	}
 
@@ -106,7 +121,7 @@ class Feed
 	public function __toString()
 	{
 
-		return \Format::forge($this->feed)->to_xml();
+		return \Format::forge($this->feed)->to_xml(null, simplexml_load_string($this->format), 'channel');
 
 	}
 
