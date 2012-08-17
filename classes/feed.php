@@ -106,7 +106,7 @@ class Feed
 	public function __toString()
 	{
 
-		return \Fuel\Core\Format::forge($this->feed)->to_xml();
+		return \Format::forge($this->feed)->to_xml();
 
 	}
 
