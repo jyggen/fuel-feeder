@@ -51,6 +51,20 @@ class Feed_Rss2 extends Feed_Driver
 	}
 
 	/**
+	 * Create <atom:link> in <channel>. Should be a link to where this feed is located.
+	 * This tag will be automatically created by Feeder with the current request URL.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function atomLink($value)
+	{
+
+		$this->addTag('atom:link', $value, 'http://www.w3.org/2005/Atom');
+
+	}
+
+	/**
 	 * Create <description> in <channel>. Should be a description of what you're "feeding".
 	 *
 	 * @param	string	$value
@@ -92,6 +106,20 @@ class Feed_Rss2 extends Feed_Driver
 	}
 
 	/**
+	 * Create <link> in <channel>. Should be a link to where the data is located or just the base URL.
+	 * This tag will be automatically created by Feeder with the base URL of your application.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function link($value)
+	{
+
+		$this->addTag('link', $value);
+
+	}
+
+	/**
 	 * Create <lastBuildDate> in <channel>. Should be when this feed was last updated.
 	 * This tag will be automatically created by Feeder with the current timestamp if missing.
 	 *
@@ -106,6 +134,34 @@ class Feed_Rss2 extends Feed_Driver
 		 * Also, the DATE_RSS constant is pretty nice :)
 		 */
 		$this->addTag('lastBuildDate', date(DATE_RSS, $value->get_timestamp()));
+
+	}
+
+	/**
+	 * Create <sy:updateFrequency> in <channel>. This is how often the feed is typically updated.
+	 * This tag will be automatically created by Feeder with the value of feeder.update.frequency if missing.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function syUpdateFrequency($value)
+	{
+
+		$this->addTag('sy:updateFrequency', $value, 'http://purl.org/rss/1.0/modules/syndication/');
+
+	}
+
+	/**
+	 * Create <sy:updatePeriod> in <channel>. This is used to set the interval or units used by <sy:updateFrequency>.
+	 * This tag will be automatically created by Feeder with the value of feeder.update.period if missing.
+	 *
+	 * @param	string	$value
+	 * @return	void
+	 */
+	public function syUpdatePeriod($value)
+	{
+
+		$this->addTag('sy:updatePeriod', $value, 'http://purl.org/rss/1.0/modules/syndication/');
 
 	}
 
@@ -127,13 +183,23 @@ class Feed_Rss2 extends Feed_Driver
 	 *
 	 * @param	string	$tag
 	 * @param	string	$value
+	 * @param	string	$namespace
 	 * @return	void
 	 */
-	public function AddTag($tag, $value)
+	public function AddTag($tag, $value, $namespace=null)
 	{
 
 		$channel = $this->getChannel();
-		$element = $this->feed->createElement($tag, $value);
+
+		if(is_null($namespace)) {
+
+			$element = $this->feed->createElement($tag, $value);
+
+		} else {
+
+			$element = $this->feed->createElementNS($namespace, $tag, $value);
+
+		}
 
 		$channel->appendChild($element);
 

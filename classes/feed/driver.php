@@ -33,9 +33,10 @@ abstract class Feed_Driver
 	 *
 	 * @param	string	$tag
 	 * @param	string	$value
+	 * @param	string	$namespace
 	 * @return	void
 	 */
-	abstract public function addTag($tag, $value);
+	abstract public function addTag($tag, $value, $namespace);
 
 	/**
 	 * Returns the feed as XML in a Response object with correct Content-Type.
