@@ -27,6 +27,11 @@ class MissingNamespaceException extends \FuelException {}
 abstract class Driver
 {
 
+	/**
+	 * Create the base elements and return the node which all future tags should be appended to.
+	 *
+	 * @return	DOMElement
+	 */
 	abstract protected function createBaseElement();
 
 	protected $base, $document;
@@ -37,55 +42,57 @@ abstract class Driver
 	 * @param	string	$tag
 	 * @param	string	$value
 	 * @param	array	$attr
+	 * @param	bool	$cdata
 	 * @return	void
 	 */
 	protected function addTag($tag, $value=false, $attr=array(), $cdata=false)
 	{
 
+		// Check if the tag belongs to a namespace
 		if(strpos($tag, ':')) {
 
 			list($prefix, $tag) = explode(':', $tag);
 
+			// Get the namespace URI of the prefix
 			$namespace = $this->getNamespace($prefix);
 
+			// If the prefix is unknown throw an exception
 			if(!$namespace = $this->getNamespace($prefix)) {
 
 				throw new MissingNamespaceException('Missing namespace for prefix "'.$prefix.'".');
 
 			}
 
+			// Create the element in its namespace
 			$tag = $this->document->createElementNS($namespace, $tag);
 
 		} else {
 
+			// Create the element
 			$tag = $this->document->createElement($tag);
 
 		}
 
+		// If the tag should contain a value
 		if($value) {
 
+			// Escape the value (as CDATA if requested) and append it to the tag
 			$node = ($cdata) ? $this->document->createCDATASection($value) : $this->document->createTextNode($value);
 			$tag->appendChild($node);
 
 		}
 
-		$this->base->appendChild($tag);
-
+		// If the tag should contain any attributes, loop through them
 		if(!empty($attr)) {
 
 			foreach($attr as $k => $v)
 			{
 
-				if($v === true) {
+				// Convert any bool to string
+				if($v === true) { $v = 'true'; }
+				if($v === false) { $v = 'false'; }
 
-					$v = 'true';
-
-				} else if($v === false) {
-
-					$v = 'false';
-
-				}
-
+				// Create the attribute, set the value and append it to the tag
 				$attribute        = $this->document->createAttribute($k);
 				$attribute->value = $v;
 
@@ -95,8 +102,16 @@ abstract class Driver
 
 		}
 
+		// Append the new tag to the base element
+		$this->base->appendChild($tag);
+
 	}
 
+	/**
+	 * Get the currently used base element.
+	 *
+	 * @return	DOMElement
+	 */
 	public function getBaseElement()
 	{
 
@@ -104,6 +119,11 @@ abstract class Driver
 
 	}
 
+	/**
+	 * Get the currently used document.
+	 *
+	 * @return	DOMDocument
+	 */
 	public function getDocument()
 	{
 
@@ -126,6 +146,12 @@ abstract class Driver
 
 	}
 
+	/**
+	 * Get the namespace URI of the prefix.
+	 *
+	 * @param	string	$prefix
+	 * @return	mixed
+	 */
 	protected function getNamespace($prefix)
 	{
 
@@ -135,6 +161,11 @@ abstract class Driver
 
 	}
 
+	/**
+	 * Return all namespaces available for the current driver.
+	 *
+	 * @return	mixed
+	 */
 	protected function getNamespaces()
 	{
 
@@ -145,6 +176,11 @@ abstract class Driver
 
 	}
 
+	/**
+	 * Add namespace declarations to the document.
+	 *
+	 * @return	void
+	 */
 	protected function setNamespaces()
 	{
 
