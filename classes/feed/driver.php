@@ -68,16 +68,6 @@ abstract class Feed_Driver extends Driver
 
 	}
 
-	protected function tag_exists($tag)
-	{
-
-		$result = $this->document->getElementsByTagName($tag);
-		print count($result);
-		print_r($result);
-		return (empty($result)) ? false : true;
-
-	}
-
 	/**
 	 * Return as XML when the object is converted to string.
 	 *
