@@ -17,34 +17,23 @@ class Feed_Rss2 extends Feed_Driver
 
 	protected $contentType = 'application/rss+xml';
 
-	public function __construct()
+	protected function createBaseElement()
 	{
 
-		parent::__construct();
-
-		// Create the root element.
-		$rss = $this->feed->createElement('rss');
-
-		$this->feed->appendChild($rss);
+		$rss     = $this->document->createElement('rss');
+		$channel = $this->document->createElement('channel');
 
 		// Append version attribute to the root element.
-		$version        = $this->feed->createAttribute('version');
+		$version        = $this->document->createAttribute('version');
 		$version->value = '2.0';
 
+
+
 		$rss->appendChild($version);
-
-		// Create namespaces for the feed.
-		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/content', 'content:attr');
-		$this->feed->createAttributeNS('http://wellformedweb.org/CommentAPI/', 'wfw:attr');
-		$this->feed->createAttributeNS('http://purl.org/dc/elements/1.1/', 'dc:attr');
-		$this->feed->createAttributeNS('http://www.w3.org/2005/Atom', 'atom:attr');
-		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/syndication/', 'sy:attr');
-		$this->feed->createAttributeNS('http://purl.org/rss/1.0/modules/slash/', 'slash:attr');
-
-		// Create channel element.
-		$channel = $this->feed->createElement('channel');
-
 		$rss->appendChild($channel);
+		$this->document->appendChild($rss);
+
+		return $channel;
 
 	}
 
@@ -55,10 +44,10 @@ class Feed_Rss2 extends Feed_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function atomLink($value)
+	public function atomLink($value, $type='application/rss+xml')
 	{
 
-		$this->addTag('atom:link', $value, 'http://www.w3.org/2005/Atom');
+		$this->addTag('atom:link', false, array('href' => $value, 'rel' => 'self', 'type' => $type));
 
 	}
 
@@ -145,7 +134,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function syUpdateFrequency($value)
 	{
 
-		$this->addTag('sy:updateFrequency', $value, 'http://purl.org/rss/1.0/modules/syndication/');
+		$this->addTag('sy:updateFrequency', $value);
 
 	}
 
@@ -159,7 +148,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function syUpdatePeriod($value)
 	{
 
-		$this->addTag('sy:updatePeriod', $value, 'http://purl.org/rss/1.0/modules/syndication/');
+		$this->addTag('sy:updatePeriod', $value);
 
 	}
 
@@ -173,68 +162,6 @@ class Feed_Rss2 extends Feed_Driver
 	{
 
 		$this->addTag('title', $value);
-
-	}
-
-	/**
-	 * Add the item object to the feed.
-	 *
-	 * @return	object	Item_Rss2
-	 */
-	public function addItem() {
-
-		$item    = Item::forge($this->getDriver(), $this->feed);
-		$element = $item->getElement();
-		$channel = $this->getChannel();
-
-		$channel->appendChild($element);
-
-		return $item;
-
-	}
-
-	/**
-	 * Add the specified tag in <channel>.
-	 *
-	 * @param	string	$tag
-	 * @param	string	$value
-	 * @param	string	$namespace
-	 * @return	void
-	 */
-	public function AddTag($tag, $value, $namespace=null)
-	{
-
-		$channel = $this->getChannel();
-
-		if(is_null($namespace)) {
-
-			$element = $this->feed->createElement($tag, $value);
-
-		} else {
-
-			$element = $this->feed->createElementNS($namespace, $tag, $value);
-
-		}
-
-		$channel->appendChild($element);
-
-	}
-
-	/**
-	 * Get the tag <channel> from the feed.
-	 *
-	 * @return	\DOMElement
-	 */
-	protected function getChannel()
-	{
-
-		$channel = $this->feed->getElementsByTagName('channel')->item(0);
-
-		if(is_null($channel)) {
-
-			throw new MissingTagException(htmlentities('Missing tag <channel> in feed.'));
-
-		} else return $channel;
 
 	}
 
