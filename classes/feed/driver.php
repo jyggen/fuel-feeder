@@ -12,37 +12,42 @@
 
 namespace Feeder;
 
-abstract class Feed_Driver
+abstract class Feed_Driver extends Driver
 {
 
 	protected $contentType;
-	protected $feed;
-	protected $format;
-	protected $required = array();
 
 	public function __construct()
 	{
 
-		$this->feed               = new \DOMDocument('1.0', 'utf-8');
-		$this->feed->formatOutput = true;
+		// Create a new DOMDocument
+		$this->document = new \DOMDocument('1.0', 'utf-8');
+
+		// Nice output (linebreaks etc.)
+		$this->document->formatOutput = \Config::get('feeder.format_output', true);
+
+		// Create the base element
+		$this->base = $this->createBaseElement();
+
+		// Setup namespaces
+		$this->setNamespaces();
 
 	}
 
-	abstract public function addItem();
-	abstract public function addTag($tag, $value, $namespace);
-
 	/**
-	 * Get the name of the current driver.
+	 * Add the item object to the feed.
 	 *
-	 * @return	string
+	 * @return	object	Item_Rss2
 	 */
-	protected function getDriver()
-	{
+	public function addItem() {
 
-		$driver = explode('_', get_class($this));
-		$driver = strtolower($driver[count($driver)-1]);
+		$item    = Item::forge($this->getDriver(), $this->document);
+		$element = $item->getBaseElement();
+		$channel = $this->base;
 
-		return $driver;
+		$channel->appendChild($element);
+
+		return $item;
 
 	}
 
@@ -71,7 +76,7 @@ abstract class Feed_Driver
 	public function __toString()
 	{
 
-		return $this->feed->saveXML();
+		return $this->document->saveXML();
 
 	}
 

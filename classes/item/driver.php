@@ -12,54 +12,14 @@
 
 namespace Feeder;
 
-abstract class Item_Driver
+abstract class Item_Driver extends Driver
 {
-
-	protected $document, $item;
-
-	abstract protected function createElement();
 
 	public function __construct($document)
 	{
 
 		$this->document = $document;
-		$this->element  = $this->createElement();
-
-	}
-
-	public function getElement()
-	{
-
-		return $this->element;
-
-	}
-
-	/**
-	 * Add the specified tag to the item.
-	 *
-	 * @param	string	$tag
-	 * @param	string	$value
-	 * @param	array	$attr
-	 * @param	string	$namespace
-	 * @return	void
-	 */
-	protected function addTag($tag, $value, $attr=array(), $namespace=null)
-	{
-
-		$node = $this->document->createTextNode($value);
-
-		if(is_null($namespace)) {
-
-			$tag = $this->document->createElement($tag);
-
-		} else {
-
-			$tag = $this->document->createElementNS($namespace, $tag);
-
-		}
-
-		$tag->appendChild($node);
-		$this->element->appendChild($tag);
+		$this->base     = $this->createBaseElement();
 
 	}
 
