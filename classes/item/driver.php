@@ -19,7 +19,7 @@ abstract class Item_Driver extends Driver
 	{
 
 		$this->document = $document;
-		$this->base     = $this->createBaseElement();
+		$this->base     = $this->create_base_element();
 
 	}
 

@@ -32,7 +32,7 @@ abstract class Driver
 	 *
 	 * @return	DOMElement
 	 */
-	abstract protected function createBaseElement();
+	abstract protected function create_base_element();
 
 	protected $base, $document;
 
@@ -45,7 +45,7 @@ abstract class Driver
 	 * @param	bool	$cdata
 	 * @return	void
 	 */
-	protected function addTag($tag, $value=false, $attr=array(), $cdata=false)
+	protected function add_tag($tag, $value=false, $attr=array(), $cdata=false)
 	{
 
 		// Check if the tag belongs to a namespace
@@ -54,10 +54,10 @@ abstract class Driver
 			list($prefix, $tag) = explode(':', $tag);
 
 			// Get the namespace URI of the prefix
-			$namespace = $this->getNamespace($prefix);
+			$namespace = $this->get_namespace($prefix);
 
 			// If the prefix is unknown throw an exception
-			if(!$namespace = $this->getNamespace($prefix)) {
+			if(!$namespace = $this->get_namespace($prefix)) {
 
 				throw new MissingNamespaceException('Missing namespace for prefix "'.$prefix.'".');
 
@@ -112,7 +112,7 @@ abstract class Driver
 	 *
 	 * @return	DOMElement
 	 */
-	public function getBaseElement()
+	public function get_base_element()
 	{
 
 		return $this->base;
@@ -124,7 +124,7 @@ abstract class Driver
 	 *
 	 * @return	DOMDocument
 	 */
-	public function getDocument()
+	public function get_document()
 	{
 
 		return $this->document;
@@ -136,7 +136,7 @@ abstract class Driver
 	 *
 	 * @return	string
 	 */
-	protected function getDriver()
+	protected function get_driver()
 	{
 
 		$driver = explode('_', get_class($this));
@@ -152,10 +152,10 @@ abstract class Driver
 	 * @param	string	$prefix
 	 * @return	mixed
 	 */
-	protected function getNamespace($prefix)
+	protected function get_namespace($prefix)
 	{
 
-		$namespaces = \Config::get('feeder.namespaces.'.$this->getDriver().'.'.$prefix);
+		$namespaces = \Config::get('feeder.drivers.'.$this->get_driver().'.namespaces.'.$prefix);
 
 		return (is_null($namespaces)) ? false : $namespaces;
 
@@ -166,10 +166,10 @@ abstract class Driver
 	 *
 	 * @return	mixed
 	 */
-	protected function getNamespaces()
+	protected function get_namespaces()
 	{
 
-		$namespaces = \Config::get('feeder.namespaces.'.$this->getDriver());
+		$namespaces = \Config::get('feeder.drivers.'.$this->get_driver().'.namespaces');
 
 		return (is_null($namespaces)) ? false : $namespaces;
 
@@ -181,10 +181,10 @@ abstract class Driver
 	 *
 	 * @return	void
 	 */
-	protected function setNamespaces()
+	protected function set_namespaces()
 	{
 
-		if($namespaces = $this->getNamespaces())
+		if($namespaces = $this->get_namespaces())
 		{
 
 			foreach($namespaces as $ns => $url)

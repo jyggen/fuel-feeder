@@ -15,7 +15,7 @@ namespace Feeder;
 class Item_Rss2 extends Item_Driver
 {
 
-	protected function createBaseElement()
+	protected function create_base_element()
 	{
 
 		$element = $this->document->createElement('item');
@@ -33,7 +33,7 @@ class Item_Rss2 extends Item_Driver
 	public function category($value)
 	{
 
-		$this->addTag('category', $value, array(), true);
+		$this->add_tag('category', $value, array(), true);
 
 	}
 
@@ -46,7 +46,7 @@ class Item_Rss2 extends Item_Driver
 	public function comments($value)
 	{
 
-		$this->addTag('comments', $value);
+		$this->add_tag('comments', $value);
 
 	}
 
@@ -56,10 +56,10 @@ class Item_Rss2 extends Item_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function contentEncoded($value)
+	public function content_encoded($value)
 	{
 
-		$this->addTag('content:encoded', $value, array(), true);
+		$this->add_tag('content:encoded', $value, array(), true);
 
 	}
 
@@ -69,10 +69,10 @@ class Item_Rss2 extends Item_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function dcCreator($value)
+	public function dc_creator($value)
 	{
 
-		$this->addTag('dc:creator', $value);
+		$this->add_tag('dc:creator', $value);
 
 	}
 
@@ -85,7 +85,7 @@ class Item_Rss2 extends Item_Driver
 	public function description($value)
 	{
 
-		$this->addTag('description', $value, array(), true);
+		$this->add_tag('description', $value, array(), true);
 
 	}
 
@@ -98,7 +98,7 @@ class Item_Rss2 extends Item_Driver
 	public function guid($value, $isPermaLink=false)
 	{
 
-		$this->addTag('guid', $value, array('isPermaLink' => $isPermaLink));
+		$this->add_tag('guid', $value, array('isPermaLink' => $isPermaLink));
 
 	}
 
@@ -111,7 +111,7 @@ class Item_Rss2 extends Item_Driver
 	public function link($value)
 	{
 
-		$this->addTag('link', $value);
+		$this->add_tag('link', $value);
 
 	}
 
@@ -121,14 +121,14 @@ class Item_Rss2 extends Item_Driver
 	 * @param	\Date	$value
 	 * @return	void
 	 */
-	public function pubDate(\Date $value)
+	public function pub_date(\Date $value)
 	{
 
 		/**
 		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
 		 * Also, the DATE_RSS constant is pretty nice :)
 		 */
-		$this->addTag('pubDate', date(DATE_RSS, $value->get_timestamp()));
+		$this->add_tag('pubDate', date(DATE_RSS, $value->get_timestamp()));
 
 	}
 
@@ -138,10 +138,10 @@ class Item_Rss2 extends Item_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function slashComments($value)
+	public function slash_comments($value)
 	{
 
-		$this->addTag('slash:comments', $value);
+		$this->add_tag('slash:comments', $value);
 
 	}
 
@@ -154,7 +154,7 @@ class Item_Rss2 extends Item_Driver
 	public function title($value)
 	{
 
-		$this->addTag('title', $value);
+		$this->add_tag('title', $value);
 
 	}
 
@@ -164,10 +164,10 @@ class Item_Rss2 extends Item_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function wfwCommentRss($value)
+	public function wfw_comment_rss($value)
 	{
 
-		$this->addTag('wfw:commentRss', $value);
+		$this->add_tag('wfw:commentRss', $value);
 
 	}
 

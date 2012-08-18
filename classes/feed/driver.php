@@ -15,7 +15,7 @@ namespace Feeder;
 abstract class Feed_Driver extends Driver
 {
 
-	protected $contentType;
+	protected $content_type;
 
 	public function __construct()
 	{
@@ -27,10 +27,10 @@ abstract class Feed_Driver extends Driver
 		$this->document->formatOutput = \Config::get('feeder.format_output', true);
 
 		// Create the base element
-		$this->base = $this->createBaseElement();
+		$this->base = $this->create_base_element();
 
 		// Setup namespaces
-		$this->setNamespaces();
+		$this->set_namespaces();
 
 	}
 
@@ -39,10 +39,10 @@ abstract class Feed_Driver extends Driver
 	 *
 	 * @return	object	Item_Rss2
 	 */
-	public function addItem() {
+	public function add_item() {
 
-		$item    = Item::forge($this->getDriver(), $this->document);
-		$element = $item->getBaseElement();
+		$item    = Item::forge($this->get_driver(), $this->document);
+		$element = $item->get_base_element();
 		$channel = $this->base;
 
 		$channel->appendChild($element);
@@ -61,10 +61,20 @@ abstract class Feed_Driver extends Driver
 
 		$response = \Response::forge();
 
-		$response->set_header('Content-Type', $this->contentType);
+		$response->set_header('Content-Type', $this->content_type);
 		$response->body($this);
 
 		return $response;
+
+	}
+
+	protected function tag_exists($tag)
+	{
+
+		$result = $this->document->getElementsByTagName($tag);
+		print count($result);
+		print_r($result);
+		return (empty($result)) ? false : true;
 
 	}
 

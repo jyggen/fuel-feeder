@@ -15,9 +15,9 @@ namespace Feeder;
 class Feed_Rss2 extends Feed_Driver
 {
 
-	protected $contentType = 'application/rss+xml';
+	protected $content_type = 'application/rss+xml';
 
-	protected function createBaseElement()
+	protected function create_base_element()
 	{
 
 		$rss     = $this->document->createElement('rss');
@@ -44,10 +44,10 @@ class Feed_Rss2 extends Feed_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function atomLink($value, $type='application/rss+xml')
+	public function atom_link($value, $type='application/rss+xml')
 	{
 
-		$this->addTag('atom:link', false, array('href' => $value, 'rel' => 'self', 'type' => $type));
+		$this->add_tag('atom:link', false, array('href' => $value, 'rel' => 'self', 'type' => $type));
 
 	}
 
@@ -60,7 +60,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function description($value)
 	{
 
-		$this->addTag('description', $value);
+		$this->add_tag('description', $value);
 
 	}
 
@@ -74,7 +74,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function generator($value)
 	{
 
-		$this->addTag('generator', $value);
+		$this->add_tag('generator', $value);
 
 	}
 
@@ -88,7 +88,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function language($value)
 	{
 
-		$this->addTag('language', $value);
+		$this->add_tag('language', $value);
 
 	}
 
@@ -102,7 +102,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function link($value)
 	{
 
-		$this->addTag('link', $value);
+		$this->add_tag('link', $value);
 
 	}
 
@@ -113,14 +113,14 @@ class Feed_Rss2 extends Feed_Driver
 	 * @param	\Date	$value
 	 * @return	void
 	 */
-	public function lastBuildDate(\Date $value)
+	public function last_build_date(\Date $value)
 	{
 
 		/**
 		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
 		 * Also, the DATE_RSS constant is pretty nice :)
 		 */
-		$this->addTag('lastBuildDate', date(DATE_RSS, $value->get_timestamp()));
+		$this->add_tag('lastBuildDate', date(DATE_RSS, $value->get_timestamp()));
 
 	}
 
@@ -131,10 +131,10 @@ class Feed_Rss2 extends Feed_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function syUpdateFrequency($value)
+	public function sy_update_frequency($value)
 	{
 
-		$this->addTag('sy:updateFrequency', $value);
+		$this->add_tag('sy:updateFrequency', $value);
 
 	}
 
@@ -145,10 +145,10 @@ class Feed_Rss2 extends Feed_Driver
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function syUpdatePeriod($value)
+	public function sy_update_period($value)
 	{
 
-		$this->addTag('sy:updatePeriod', $value);
+		$this->add_tag('sy:updatePeriod', $value);
 
 	}
 
@@ -161,7 +161,7 @@ class Feed_Rss2 extends Feed_Driver
 	public function title($value)
 	{
 
-		$this->addTag('title', $value);
+		$this->add_tag('title', $value);
 
 	}
 
