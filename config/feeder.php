@@ -21,13 +21,13 @@ return array(
 				'sy'      => 'http://purl.org/rss/1.0/modules/syndication/',
 				'slash'   => 'http://purl.org/rss/1.0/modules/slash/',
 			),
-			'generate' => array('generator'),
+			'generate' => array('atom:link', 'generator', 'language', 'link', 'lastBuildDate', 'sy:updateFrequency', 'sy:updatePeriod'),
 			'required' => array('description', 'link', 'title'),
 		),
 	),
 	'format_output' => true,
 	'update' => array(
-		'frequency' => 'hourly',
-		'period'    => 1,
+		'frequency' => 1,
+		'period'    => 'hourly',
 	),
 );
