@@ -27,8 +27,6 @@ class Feed_Rss2 extends Feed_Driver
 		$version        = $this->document->createAttribute('version');
 		$version->value = '2.0';
 
-
-
 		$rss->appendChild($version);
 		$rss->appendChild($channel);
 		$this->document->appendChild($rss);
@@ -39,13 +37,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <atom:link> in <channel>. Should be a link to where this feed is located.
-	 * This tag will be automatically created by Feeder with the current request URL.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function atom_link($value, $type='application/rss+xml')
+	public function atom_link($value=null, $type='application/rss+xml')
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Uri::current();
+
+		}
 
 		$this->add_tag('atom:link', false, array('href' => $value, 'rel' => 'self', 'type' => $type));
 
@@ -66,13 +70,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <generator> in <channel>. Program used to generate the channel.
-	 * This tag will be automatically created by Feeder to give itself some credit.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function generator($value)
+	public function generator($value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = $this->generator;
+
+		}
 
 		$this->add_tag('generator', $value);
 
@@ -80,13 +90,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <language> in <channel>. Should be the language of the feed.
-	 * This tag will be automatically created by Feeder with the value of config.language if missing.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function language($value)
+	public function language($value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Config::get('language');
+
+		}
 
 		$this->add_tag('language', $value);
 
@@ -94,13 +110,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <link> in <channel>. Should be a link to where the data is located or just the base URL.
-	 * This tag will be automatically created by Feeder with the base URL of your application.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function link($value)
+	public function link($value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Uri::base();
+
+		}
 
 		$this->add_tag('link', $value);
 
@@ -108,13 +130,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <lastBuildDate> in <channel>. Should be when this feed was last updated.
-	 * This tag will be automatically created by Feeder with the current timestamp if missing.
 	 *
 	 * @param	\Date	$value
 	 * @return	void
 	 */
-	public function last_build_date(\Date $value)
+	public function last_build_date(\Date $value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Date::forge();
+
+		}
 
 		/**
 		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
@@ -126,13 +154,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <sy:updateFrequency> in <channel>. This is how often the feed is typically updated.
-	 * This tag will be automatically created by Feeder with the value of feeder.update.frequency if missing.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function sy_update_frequency($value)
+	public function sy_update_frequency($value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Config::get('feeder.update.frequency');
+
+		}
 
 		$this->add_tag('sy:updateFrequency', $value);
 
@@ -140,13 +174,19 @@ class Feed_Rss2 extends Feed_Driver
 
 	/**
 	 * Create <sy:updatePeriod> in <channel>. This is used to set the interval or units used by <sy:updateFrequency>.
-	 * This tag will be automatically created by Feeder with the value of feeder.update.period if missing.
 	 *
 	 * @param	string	$value
 	 * @return	void
 	 */
-	public function sy_update_period($value)
+	public function sy_update_period($value=null)
 	{
+
+		if(is_null($value))
+		{
+
+			$value = \Config::get('feeder.update.period');
+
+		}
 
 		$this->add_tag('sy:updatePeriod', $value);
 
