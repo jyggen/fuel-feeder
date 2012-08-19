@@ -198,4 +198,26 @@ abstract class Driver
 
 	}
 
+	protected function tag_exists($tag)
+	{
+
+		$nodes = array();
+		foreach($this->base->childNodes as $node)
+		{
+
+			$nodes[] = $node->tagName;
+
+		}
+
+		return (in_array($tag, $nodes));
+
+	}
+
+	protected function tag_to_method($tag)
+	{
+
+		return str_replace(':', '_', \Inflector::underscore($tag));
+
+	}
+
 }
