@@ -15,7 +15,8 @@ namespace Feeder;
 abstract class Feed_Driver extends Driver
 {
 
-	protected $content_type;
+	protected $content_type, $items;
+	protected $generator = 'https://github.com/jyggen/fuel-feeder';
 
 	public function __construct()
 	{
@@ -39,15 +40,39 @@ abstract class Feed_Driver extends Driver
 	 *
 	 * @return	object	Item_Rss2
 	 */
-	public function add_item() {
+	public function add_item()
+	{
 
-		$item    = Item::forge($this->get_driver(), $this->document);
-		$element = $item->get_base_element();
-		$channel = $this->base;
-
-		$channel->appendChild($element);
+		$item          = Item::forge($this->get_driver(), $this->document);
+		$element       = $item->get_base_element();
+		$this->items[] = $element;
 
 		return $item;
+
+	}
+
+	protected function generate_tags()
+	{
+
+		$generate = \Config::get('feeder.drivers.'.$this->get_driver().'.generate');
+
+		if(!is_null($generate))
+		{
+
+			foreach($generate as $tag)
+			{
+
+				if(!$this->tag_exists($tag))
+				{
+
+					$method = $this->tag_to_method($tag);
+					$this->$method();
+
+				}
+
+			}
+
+		}
 
 	}
 
@@ -59,12 +84,46 @@ abstract class Feed_Driver extends Driver
 	public function response()
 	{
 
+		$this->generate_tags();
+		$this->validate_feed();
+
+		foreach($this->items as $item)
+		{
+
+			$this->base->appendChild($item);
+
+		}
+
 		$response = \Response::forge();
 
 		$response->set_header('Content-Type', $this->content_type);
 		$response->body($this);
 
 		return $response;
+
+	}
+
+	protected function validate_feed()
+	{
+
+		$required = \Config::get('feeder.drivers.'.$this->get_driver().'.required');
+
+		if(!is_null($required))
+		{
+
+			foreach($required as $tag)
+			{
+
+				if(!$this->tag_exists($tag))
+				{
+
+					throw new MissingTagException('Missing tag '.htmlentities('<'.$tag.'>').' in feed.');
+
+				}
+
+			}
+
+		}
 
 	}
 
