@@ -14,7 +14,7 @@ return array(
 	'drivers' => array(
 		'rss2' => array(
 			'namespaces' => array(
-				'content' => 'http://purl.org/rss/1.0/modules/content',
+				'content' => 'http://purl.org/rss/1.0/modules/content/',
 				'wfw'     => 'http://wellformedweb.org/CommentAPI/',
 				'dc'      => 'http://purl.org/dc/elements/1.1/',
 				'atom'    => 'http://www.w3.org/2005/Atom',
