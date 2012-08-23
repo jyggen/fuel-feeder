@@ -12,6 +12,13 @@
 
 return array(
 	'drivers' => array(
+		'atom' => array(
+			'namespaces' => array(
+				'thr' => 'http://purl.org/syndication/thread/1.0',
+			),
+			'generate' => array('generator', 'id', 'link#alternate', 'link#self', 'updated'),
+			'required' => array('title', 'id', 'updated'),
+		),
 		'rss2' => array(
 			'namespaces' => array(
 				'content' => 'http://purl.org/rss/1.0/modules/content/',
