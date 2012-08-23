@@ -87,10 +87,15 @@ abstract class Feed_Driver extends Driver
 		$this->generate_tags();
 		$this->validate_feed();
 
-		foreach($this->items as $item)
+		if(!empty($this->items))
 		{
 
-			$this->base->appendChild($item);
+			foreach($this->items as $item)
+			{
+
+				$this->base->appendChild($item);
+
+			}
 
 		}
 
