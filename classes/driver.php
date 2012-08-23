@@ -15,6 +15,7 @@ namespace Feeder;
 
 class MissingTagException extends \FuelException {}
 class MissingNamespaceException extends \FuelException {}
+class InvalidOptionException extends \FuelException {}
 
 
 /**
@@ -205,11 +206,47 @@ abstract class Driver
 		foreach($this->base->childNodes as $node)
 		{
 
-			$nodes[] = $node->tagName;
+			$nodes[$node->tagName][] = $node;
 
 		}
 
-		return (in_array($tag, $nodes));
+		// If we require a specific attribute value
+		if(strpos($tag, '#'))
+		{
+
+			list($tag, $attribute) = explode('#', $tag);
+
+			if(array_key_exists($tag, $nodes))
+			{
+
+				foreach($nodes[$tag] as $node)
+				{
+
+					foreach($node->attributes as $attr)
+					{
+
+						if($attr->value == $attribute)
+						{
+
+							return true;
+
+						}
+
+					}
+
+				}
+
+			}
+
+			return false;
+
+		}
+		else
+		{
+
+			return (array_key_exists($tag, $nodes));
+
+		}
 
 	}
 
