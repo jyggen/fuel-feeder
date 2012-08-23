@@ -124,10 +124,6 @@ class Item_Rss2 extends Item_Driver
 	public function pub_date(\Date $value)
 	{
 
-		/**
-		 * Would love to use Date::format() here, but %z in strftime is weird on Windows.
-		 * Also, the DATE_RSS constant is pretty nice :)
-		 */
 		$this->add_tag('pubDate', date(DATE_RSS, $value->get_timestamp()));
 
 	}
