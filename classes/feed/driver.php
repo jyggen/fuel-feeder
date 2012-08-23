@@ -16,7 +16,11 @@ abstract class Feed_Driver extends Driver
 {
 
 	protected $content_type, $items;
-	protected $generator = 'https://github.com/jyggen/fuel-feeder';
+	protected $generator = array(
+		'name'    => 'Feeder',
+		'uri'     => 'https://github.com/jyggen/fuel-feeder',
+		'version' => '1.0'
+	);
 
 	public function __construct()
 	{
@@ -65,8 +69,21 @@ abstract class Feed_Driver extends Driver
 				if(!$this->tag_exists($tag))
 				{
 
-					$method = $this->tag_to_method($tag);
-					$this->$method();
+					if(strpos($tag, '#'))
+					{
+
+						$tag    = explode('#', $tag);
+						$method = $this->tag_to_method($tag[0]);
+						$this->$method(null, $tag[1]);
+
+					}
+					else
+					{
+
+						$method = $this->tag_to_method($tag);
+						$this->$method();
+
+					}
 
 				}
 
