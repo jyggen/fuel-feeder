@@ -67,7 +67,7 @@ class Feed_Rss2 extends Feed_Driver
 	 *
 	 * @return	void
 	 */
-	public function generator()
+	public function generator($value=null)
 	{
 
 		$value or $value = $this->generator['uri'];
