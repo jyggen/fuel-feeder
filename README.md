@@ -2,6 +2,8 @@
 
 Feeder is a Fuel package that helps you create Atom and RSS feeds.
 
+[![Build Status](https://secure.travis-ci.org/jyggen/fuel-feeder.png)](http://travis-ci.org/jyggen/fuel-feeder)
+
 ## Installing
 
 Simply add `feeder` to your config.php `always_loaded.packages` config option.
