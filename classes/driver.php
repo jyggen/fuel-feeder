@@ -13,9 +13,9 @@
 namespace Feeder;
 
 
-class MissingTagException extends \FuelException {}
-class MissingNamespaceException extends \FuelException {}
-class InvalidOptionException extends \FuelException {}
+class MissingTagException extends \Exception {}
+class MissingNamespaceException extends \Exception {}
+class InvalidOptionException extends \Exception {}
 
 
 /**
